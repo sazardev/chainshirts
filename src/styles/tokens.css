@@ -1,0 +1,130 @@
+/*
+ * Single source of truth for every raw design value.
+ * Polaris token names and values come from DESIGN.md; the Chainsaw Man brand
+ * colour and neon accents are injected through the same token names.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --p-color-bg: #f1f1f1;
+  --p-color-bg-surface: #ffffff;
+  --p-color-bg-surface-secondary: #f7f7f7;
+  --p-color-bg-surface-hover: #f7f7f7;
+  --p-color-bg-inverse: #1a1a1a;
+
+  /* Text */
+  --p-color-text: #303030;
+  --p-color-text-secondary: #616161;
+  --p-color-text-disabled: #b5b5b5;
+  --p-color-text-on-brand: #ffffff;
+  --p-color-text-on-inverse: #f7f7f7;
+
+  /* Brand, links and status */
+  --p-color-bg-fill-brand: #b3122e;
+  --p-color-bg-fill-brand-hover: #8f0e24;
+  --p-color-text-link: #005bd3;
+  --p-color-text-critical: #8e0b21;
+  --p-color-bg-fill-critical: #c70a24;
+  --p-color-bg-fill-success: #29845a;
+  --p-color-bg-fill-warning: #ffb800;
+  --p-color-border: #e3e3e3;
+  --p-color-border-focus: #005bd3;
+
+  /* Chainsaw Man accents (DESIGN.md neon set) */
+  --p-color-bg-canvas: #0b0612;
+  --p-color-accent-magenta: #ff2bd6;
+  --p-color-accent-magenta-ink: #a00082;
+  --p-color-accent-cyan: #00f0ff;
+  --p-color-accent-violet: #9d4edd;
+  --p-color-accent-on-canvas: #f7f2ff;
+
+  /* Typography */
+  --p-font-family-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --p-font-family-mono: ui-monospace, "SFMono-Regular", "Cascadia Code", monospace;
+  --p-font-size-heading-2xl: clamp(1.75rem, 1.5rem + 1vw, 2rem);
+  --p-font-size-heading-xl: 1.5rem;
+  --p-font-size-heading-lg: 1.25rem;
+  --p-font-size-heading-md: 0.875rem;
+  --p-font-size-heading-sm: 0.8125rem;
+  --p-font-size-body-lg: 0.875rem;
+  --p-font-size-body-md: 0.8125rem;
+  --p-font-size-body-sm: 0.75rem;
+
+  /* Spacing (4px base) */
+  --p-space-050: 2px;
+  --p-space-100: 4px;
+  --p-space-150: 6px;
+  --p-space-200: 8px;
+  --p-space-300: 12px;
+  --p-space-400: 16px;
+  --p-space-500: 20px;
+  --p-space-600: 24px;
+  --p-space-800: 32px;
+  --p-space-1000: 40px;
+  --p-space-1200: 48px;
+  --p-space-1600: 64px;
+
+  /* Radius */
+  --p-border-radius-100: 4px;
+  --p-border-radius-200: 8px;
+  --p-border-radius-300: 12px;
+  --p-border-radius-400: 16px;
+  --p-border-radius-full: 9999px;
+
+  /* Elevation */
+  --p-shadow-100: 0 1px 2px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.04);
+  --p-shadow-200: 0 2px 8px rgb(0 0 0 / 0.1);
+  --p-shadow-400: 0 8px 24px rgb(0 0 0 / 0.16);
+  --p-shadow-600: 0 16px 48px rgb(0 0 0 / 0.24);
+  --p-shadow-button: inset 0 1px 0 rgb(255 255 255 / 0.18);
+
+  /* Motion */
+  --p-motion-duration-100: 100ms;
+  --p-motion-duration-150: 150ms;
+  --p-motion-duration-200: 200ms;
+  --p-motion-duration-250: 250ms;
+  --p-motion-duration-300: 300ms;
+  --p-motion-duration-500: 500ms;
+  --p-motion-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --p-motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --p-motion-ease-out: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Layout */
+  --p-page-max-width: 1440px;
+  --p-content-measure: 70ch;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --p-color-bg: #100c18;
+  --p-color-bg-surface: #191323;
+  --p-color-bg-surface-secondary: #221a30;
+  --p-color-bg-surface-hover: #2a2139;
+  --p-color-bg-inverse: #f1edf7;
+
+  --p-color-text: #f5f1fa;
+  --p-color-text-secondary: #c6bcd4;
+  --p-color-text-disabled: #857a95;
+  --p-color-text-on-brand: #ffffff;
+  --p-color-text-on-inverse: #1a1a1a;
+
+  --p-color-bg-fill-brand: #ff3b5c;
+  --p-color-bg-fill-brand-hover: #ff6079;
+  --p-color-text-link: #7cb8ff;
+  --p-color-text-critical: #ff91a4;
+  --p-color-bg-fill-critical: #e11d48;
+  --p-color-bg-fill-success: #3fbc82;
+  --p-color-bg-fill-warning: #ffc94a;
+  --p-color-border: #372d47;
+  --p-color-border-focus: #7cb8ff;
+  --p-color-accent-magenta-ink: #ff6ce3;
+
+  --p-shadow-100: 0 1px 3px rgb(0 0 0 / 0.5);
+  --p-shadow-200: 0 4px 12px rgb(0 0 0 / 0.6);
+  --p-shadow-400: 0 12px 32px rgb(0 0 0 / 0.7);
+  --p-shadow-600: 0 20px 60px rgb(0 0 0 / 0.8);
+  --p-shadow-button: inset 0 1px 0 rgb(255 255 255 / 0.08);
+}

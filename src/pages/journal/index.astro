@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatArticleDate, getArticles } from '../../lib/journal';
+
+const articles = await getArticles();
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Blog',
+      name: 'ChainShirts Journal',
+      posts: articles.map((article) => ({
+        '@type': 'BlogPosting',
+        headline: article.title,
+        datePublished: article.publishedAt,
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Journal"
+  description="Field notes, gear guides and style stories from ChainShirts."
+  path="/journal"
+  schema={schema}
+>
+  <p class="eyebrow">Field notes</p>
+  <h1 class="mt-2 text-display font-bold text-text">The Journal</h1>
+  <p class="mt-2 max-w-2xl text-body-lg text-muted">Guides, stories and the thinking behind each drop.</p>
+
+  <ul class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {articles.map((article) => (
+      <li>
+        <a href={`/journal/${article.slug}`} class="surface-card group block h-full overflow-hidden no-underline">
+          <img src={article.cover} alt={article.coverAlt} width="1200" height="500" loading="lazy" class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div class="p-5">
+            <p class="text-body-sm font-bold uppercase tracking-widest text-muted">{article.category}</p>
+            <h2 class="mt-1 text-heading-md font-bold text-text">{article.title}</h2>
+            <p class="mt-2 text-body-md text-muted">{article.description}</p>
+            <p class="mt-4 text-body-sm text-muted">
+              {formatArticleDate(article.publishedAt)} · {article.readingMinutes} min read
+            </p>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

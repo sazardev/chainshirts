@@ -1,0 +1,22 @@
+---
+import Account from '../components/islands/Account';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProducts } from '../lib/catalog';
+
+const products = await getProducts();
+---
+
+<BaseLayout
+  title="Account"
+  description="Your ChainShirts account, favourites, reviews and order history."
+  path="/account"
+>
+  <header>
+    <p class="eyebrow">Your account</p>
+    <h1 class="mt-2 text-display font-bold text-text">Account</h1>
+    <p class="mt-2 text-body-lg text-muted">Manage your profile, favourites and orders.</p>
+  </header>
+  <div class="mt-8">
+    <Account products={products} client:load />
+  </div>
+</BaseLayout>

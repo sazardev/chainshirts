@@ -1,0 +1,26 @@
+---
+import Banner from '../components/Banner.astro';
+import ProfileForm from '../components/islands/ProfileForm';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Your account"
+  description="Create or switch between your ChainShirts accounts."
+  path="/profile"
+>
+  <header>
+    <p class="eyebrow">Step one</p>
+    <h1 class="mt-2 text-display font-bold text-text">Your account</h1>
+  </header>
+
+  <div class="mt-6">
+    <Banner tone="info" title="A profile is just a name">
+      Keep your favourites, reviews, bag and orders together in one place.
+    </Banner>
+  </div>
+
+  <div class="mt-8">
+    <ProfileForm client:load />
+  </div>
+</BaseLayout>

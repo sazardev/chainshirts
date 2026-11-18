@@ -1,0 +1,62 @@
+---
+const year = new Date().getFullYear();
+const columns = [
+  {
+    title: 'Shop',
+    links: [
+      { label: 'All products', href: '/catalog' },
+      { label: 'Collections', href: '/collections' },
+      { label: 'New arrivals', href: '/catalog' },
+      { label: 'Deals', href: '/catalog' },
+    ],
+  },
+  {
+    title: 'Categories',
+    links: [
+      { label: 'T-Shirts', href: '/categories/t-shirts' },
+      { label: 'Hoodies', href: '/categories/hoodies' },
+      { label: 'Jackets', href: '/categories/jackets' },
+      { label: 'Audio', href: '/categories/audio' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Journal', href: '/journal' },
+      { label: 'Your account', href: '/account' },
+      { label: 'Profile', href: '/profile' },
+      { label: 'Contact', href: '/journal' },
+    ],
+  },
+];
+---
+
+<footer class="mt-16 border-t border-border bg-surface-secondary">
+  <div class="page-container grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
+    <div>
+      <p class="text-heading-md font-extrabold tracking-wide text-text">CHAINSHIRTS</p>
+      <p class="mt-2 max-w-xs text-body-sm text-muted">
+        Anime-inspired fashion, gear and collectibles for the bold. New drops every Friday.
+      </p>
+      <p class="mt-4 text-body-sm font-semibold text-link">Free shipping over $75</p>
+    </div>
+    {columns.map((column) => (
+      <nav aria-label={column.title}>
+        <h2 class="text-body-md font-bold text-text">{column.title}</h2>
+        <ul class="mt-3 flex flex-col gap-2">
+          {column.links.map((link) => (
+            <li>
+              <a href={link.href} class="text-body-sm text-muted hover:text-link hover:underline">{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    ))}
+  </div>
+  <div class="border-t border-border">
+    <div class="page-container flex flex-wrap items-center justify-between gap-3 py-5 text-body-sm text-muted">
+      <p>© {year} ChainShirts. All rights reserved.</p>
+      <p>Designed for the bold · Public Safety Division</p>
+    </div>
+  </div>
+</footer>

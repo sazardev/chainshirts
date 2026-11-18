@@ -1,0 +1,38 @@
+---
+import type { Category } from '../lib/domain/product';
+
+interface Props {
+  category: Category;
+  count: number;
+}
+
+const { category, count } = Astro.props;
+const accentClass: Record<Category['accent'], string> = {
+  magenta: 'border-magenta/60 text-magenta',
+  cyan: 'border-cyan/60 text-cyan',
+  violet: 'border-violet/60 text-violet',
+  red: 'border-danger/60 text-danger',
+};
+---
+
+<a
+  href={`/categories/${category.slug}`}
+  class={`surface-card group flex h-full flex-col overflow-hidden border-t-4 no-underline transition-transform duration-normal hover:-translate-y-0.5 ${accentClass[category.accent]}`}
+>
+  {category.image && (
+    <img
+      src={category.image.src}
+      alt={category.image.alt}
+      width="640"
+      height="800"
+      loading="lazy"
+      decoding="async"
+      class="aspect-4/5 w-full object-cover"
+    />
+  )}
+  <div class="flex flex-1 flex-col gap-1 p-4">
+    <h3 class="text-heading-md font-semibold text-text group-hover:text-link">{category.name}</h3>
+    <p class="text-body-sm text-muted">{category.description}</p>
+    <p class="mt-auto pt-2 text-body-sm font-semibold text-muted">{count} products →</p>
+  </div>
+</a>

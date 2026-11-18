@@ -1,0 +1,14 @@
+---
+import OrderConfirmation from '../components/islands/OrderConfirmation';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Order confirmation"
+  description="Your ChainShirts order confirmation."
+  path="/order-confirmation"
+>
+  <div class="mt-2">
+    <OrderConfirmation client:load />
+  </div>
+</BaseLayout>

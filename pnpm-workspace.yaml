@@ -1,0 +1,12 @@
+# Compatibility note: `astro check` still needs TypeScript 6's programmatic API,
+# so the root `typescript` is pinned to 6.0.3 while `typescript7` (aliased) is
+# used by the `typecheck` script for `tsc --noEmit`.
+
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  sharp: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - miniflare@5.20261117.0-beta
+  - wrangler@4.164.0

@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+@layer reset, tokens, base, components, utilities;
+
+@import "./tokens.css" layer(tokens);
+
+@theme {
+  --color-bg: var(--p-color-bg);
+  --color-surface: var(--p-color-bg-surface);
+  --color-surface-secondary: var(--p-color-bg-surface-secondary);
+  --color-surface-hover: var(--p-color-bg-surface-hover);
+  --color-inverse: var(--p-color-bg-inverse);
+  --color-canvas: var(--p-color-bg-canvas);
+
+  --color-text: var(--p-color-text);
+  --color-muted: var(--p-color-text-secondary);
+  --color-disabled: var(--p-color-text-disabled);
+  --color-on-brand: var(--p-color-text-on-brand);
+  --color-on-inverse: var(--p-color-text-on-inverse);
+
+  --color-brand: var(--p-color-bg-fill-brand);
+  --color-brand-hover: var(--p-color-bg-fill-brand-hover);
+  --color-link: var(--p-color-text-link);
+  --color-critical: var(--p-color-text-critical);
+  --color-danger: var(--p-color-bg-fill-critical);
+  --color-success: var(--p-color-bg-fill-success);
+  --color-warning: var(--p-color-bg-fill-warning);
+  --color-border: var(--p-color-border);
+  --color-focus: var(--p-color-border-focus);
+
+  --color-magenta: var(--p-color-accent-magenta);
+  --color-magenta-ink: var(--p-color-accent-magenta-ink);
+  --color-cyan: var(--p-color-accent-cyan);
+  --color-violet: var(--p-color-accent-violet);
+  --color-accent-text: var(--p-color-accent-on-canvas);
+
+  --font-sans: var(--p-font-family-sans);
+  --font-mono: var(--p-font-family-mono);
+
+  --text-display: var(--p-font-size-heading-2xl);
+  --text-heading-xl: var(--p-font-size-heading-xl);
+  --text-heading-lg: var(--p-font-size-heading-lg);
+  --text-heading-md: var(--p-font-size-heading-md);
+  --text-heading-sm: var(--p-font-size-heading-sm);
+  --text-body-lg: var(--p-font-size-body-lg);
+  --text-body-md: var(--p-font-size-body-md);
+  --text-body-sm: var(--p-font-size-body-sm);
+
+  --spacing-050: var(--p-space-050);
+  --spacing-600: var(--p-space-600);
+  --radius-sm: var(--p-border-radius-100);
+  --radius-md: var(--p-border-radius-200);
+  --radius-lg: var(--p-border-radius-300);
+  --radius-xl: var(--p-border-radius-400);
+  --radius-full: var(--p-border-radius-full);
+
+  --shadow-card: var(--p-shadow-100);
+  --shadow-popover: var(--p-shadow-400);
+  --shadow-modal: var(--p-shadow-600);
+  --shadow-button: var(--p-shadow-button);
+
+  --duration-quick: var(--p-motion-duration-150);
+  --duration-normal: var(--p-motion-duration-200);
+  --duration-panel: var(--p-motion-duration-300);
+  --ease-enter: var(--p-motion-ease-out);
+  --ease-leave: var(--p-motion-ease-in);
+}
+
+@layer base {
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/Inter-Variable.woff2") format("woff2");
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background: var(--color-bg);
+    font-size: 16px;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  ul,
+  ol {
+    margin: 0;
+  }
+
+  ul,
+  ol {
+    padding: 0;
+    list-style: none;
+  }
+
+  img,
+  picture,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: var(--color-link);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--color-magenta) 35%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    /* biome-ignore-start lint/complexity/noImportantStyles: reduced-motion overrides must win */
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 150ms !important;
+    }
+    /* biome-ignore-end lint/complexity/noImportantStyles: reduced-motion overrides must win */
+  }
+}
+
+@layer components {
+  .page-container {
+    width: 100%;
+    max-width: var(--p-page-max-width);
+    margin-inline: auto;
+    padding-inline: var(--p-space-400);
+  }
+
+  .surface-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  .canvas-panel {
+    background:
+      radial-gradient(
+        circle at 12% 20%,
+        color-mix(in oklch, var(--color-violet) 32%, transparent),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 88% 70%,
+        color-mix(in oklch, var(--color-magenta) 28%, transparent),
+        transparent 50%
+      ),
+      var(--color-canvas);
+    color: var(--color-accent-text);
+    border-radius: var(--radius-xl);
+  }
+
+  .eyebrow {
+    font-size: var(--p-font-size-body-sm);
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-magenta-ink);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: var(--p-space-200);
+    top: calc(-1 * var(--p-space-1200));
+    z-index: 100;
+    background: var(--color-surface);
+    color: var(--color-text);
+    padding: var(--p-space-200) var(--p-space-400);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-popover);
+  }
+
+  .skip-link:focus {
+    top: var(--p-space-200);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .glass {
+    background: color-mix(in oklch, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgb(255 255 255 / 0.18);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--color-surface);
+    backdrop-filter: none;
+  }
+}

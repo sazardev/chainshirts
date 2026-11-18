@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.astro/
+.idea/
+.vscode/
+*.log
+.DS_Store
+coverage/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+wrangler.toml.bak
+.dev.vars
+__pycache__/
+*.pyc

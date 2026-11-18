@@ -1,0 +1,315 @@
+---
+import bannerAudio from '../assets/banners/banner-audio.webp';
+import bannerCollect from '../assets/banners/banner-collect.webp';
+import bannerDrop from '../assets/banners/banner-drop.webp';
+import bannerGear from '../assets/banners/banner-gear.webp';
+import bannerNew from '../assets/banners/banner-new.webp';
+import bannerSale from '../assets/banners/banner-sale.webp';
+import Banner from '../components/Banner.astro';
+import CategoryTile from '../components/CategoryTile.astro';
+import Countdown from '../components/islands/Countdown';
+import IntroVideo from '../components/islands/IntroVideo';
+import Newsletter from '../components/islands/Newsletter';
+import PromoCarousel from '../components/islands/PromoCarousel';
+import TabToggle from '../components/islands/TabToggle';
+import ProductCard from '../components/ProductCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCategories, getProducts } from '../lib/catalog';
+import { collections } from '../lib/collections';
+import { discountPercent } from '../lib/domain/product';
+import { formatArticleDate, getArticles } from '../lib/journal';
+import { itemListSchema, organizationSchema, websiteSchema } from '../lib/seo';
+import { SITE_TAGLINE } from '../lib/site';
+
+const [allProducts, categories, articles] = await Promise.all([
+  getProducts(),
+  getCategories(),
+  getArticles(),
+]);
+const countByCategory = new Map<string, number>();
+for (const product of allProducts) {
+  countByCategory.set(product.category, (countByCategory.get(product.category) ?? 0) + 1);
+}
+
+const deals = allProducts.filter((product) => discountPercent(product) >= 18).slice(0, 8);
+const bestSellers = [...allProducts].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 8);
+const newArrivals = [...allProducts]
+  .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  .slice(0, 8);
+const topRated = [...allProducts].sort((a, b) => b.rating - a.rating).slice(0, 8);
+
+const slides = [
+  {
+    src: bannerDrop.src,
+    alt: 'New season apparel campaign',
+    href: '/collections/public-safety',
+    eyebrow: 'Season 03 · Now live',
+    title: 'The Public Safety drop',
+    text: 'Heavyweight layers and sharp cuts. Up to 25% off the division collection.',
+  },
+  {
+    src: bannerGear.src,
+    alt: 'Gaming gear campaign',
+    href: '/collections/desk-dominion',
+    eyebrow: 'Desk Dominion',
+    title: 'Build your battle station',
+    text: 'Mechanical keyboards, precision mice and audio. Free shipping on all gear.',
+  },
+  {
+    src: bannerSale.src,
+    alt: 'Sale campaign',
+    href: '/collections/neon-nights',
+    eyebrow: 'Limited time',
+    title: 'Up to 40% off',
+    text: 'Neon Nights is here. Loud prints and limited colourways at reduced prices.',
+  },
+  {
+    src: bannerNew.src,
+    alt: 'New season footwear campaign',
+    href: '/collections/night-runners',
+    eyebrow: 'Footwear 04',
+    title: 'Night Runners',
+    text: 'Sneakers and boots made for long walks through neon-lit streets.',
+  },
+  {
+    src: bannerCollect.src,
+    alt: 'Collectibles campaign',
+    href: '/collections/shelf-legends',
+    eyebrow: 'Objects 05',
+    title: 'Shelf Legends',
+    text: 'Figures, prints and small objects for the collection shelf.',
+  },
+  {
+    src: bannerAudio.src,
+    alt: 'Audio campaign',
+    href: '/collections/sound-system',
+    eyebrow: 'Audio 06',
+    title: 'Sound System',
+    text: 'Headphones, speakers and microphones for every setup.',
+  },
+];
+
+const testimonials = [
+  {
+    name: 'Mara V.',
+    role: 'Verified buyer',
+    quote:
+      'The hoodie is heavier than I expected and the print still looks perfect after three washes.',
+    initials: 'MV',
+  },
+  {
+    name: 'Kenji T.',
+    role: 'Verified buyer',
+    quote: 'Type-65 board sounds incredible. Shipping was quick and the packaging was spot on.',
+    initials: 'KT',
+  },
+  {
+    name: 'Ivy R.',
+    role: 'Verified buyer',
+    quote:
+      'Finally found a store that gets the aesthetic right without charging ridiculous prices.',
+    initials: 'IR',
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [organizationSchema(), websiteSchema(), itemListSchema(bestSellers)],
+};
+
+const tabs = [
+  { id: 'bestsellers', label: 'Best sellers' },
+  { id: 'new', label: 'New arrivals' },
+  { id: 'rated', label: 'Top rated' },
+];
+---
+
+<BaseLayout
+  title="Chainsaw Man inspired fashion & gear"
+  description={SITE_TAGLINE}
+  path="/"
+  image="/og-image.png"
+  schema={schema}
+>
+  <section class="canvas-panel relative overflow-hidden p-6 sm:min-h-[34rem] sm:p-12" aria-labelledby="hero-heading">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="/video/poster.webp"
+      aria-hidden="true"
+      class="absolute inset-0 h-full w-full object-cover opacity-90"
+    >
+      <source src="/video/intro.webm" type="video/webm" />
+      <source src="/video/intro.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-r from-canvas/95 via-canvas/55 to-canvas/10" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-canvas via-transparent to-transparent" aria-hidden="true"></div>
+
+    <div class="relative z-10 max-w-2xl py-12 sm:py-20">
+      <p class="eyebrow">Public Safety Division · Season 03</p>
+      <h1 id="hero-heading" class="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl">
+        Wear the<br /><span class="text-magenta">chaos.</span>
+      </h1>
+      <p class="mt-5 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+        Tees, hoodies, pants, gaming gear and the small details — built for people who like their fashion loud.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="/catalog"
+          class="inline-flex min-h-12 items-center rounded-md bg-brand px-6 text-sm font-bold text-on-brand shadow-button transition-colors duration-quick hover:bg-brand-hover"
+        >
+          Shop the drop
+        </a>
+        <IntroVideo client:load />
+      </div>
+      <dl class="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-white/70">
+        <div><dt class="text-xs uppercase tracking-widest">Products</dt><dd class="text-xl font-bold text-white">{allProducts.length}</dd></div>
+        <div><dt class="text-xs uppercase tracking-widest">Categories</dt><dd class="text-xl font-bold text-white">{categories.length}</dd></div>
+        <div><dt class="text-xs uppercase tracking-widest">Average rating</dt><dd class="text-xl font-bold text-white">4.7 ★</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-y border-border py-4 text-xs font-bold uppercase tracking-widest text-muted">
+    <span>✓ Free shipping over $75</span><span>✓ Secure checkout</span><span>✓ 30-day returns</span><span>✓ New drops weekly</span><span>✓ Member perks</span>
+  </div>
+
+  <div class="mt-6">
+    <Banner tone="info" title="Welcome offer — 15% off your first order">
+      Use code <strong>CHAOS15</strong> at checkout. Free shipping on orders over $75.
+    </Banner>
+  </div>
+
+  <section class="mt-8" aria-label="Current promotions">
+    <PromoCarousel slides={slides} client:visible />
+  </section>
+
+  <section class="mt-14" aria-labelledby="categories-heading">
+    <p class="eyebrow">Find your lane</p>
+    <h2 id="categories-heading" class="mt-1 text-heading-xl font-bold text-text">Shop by category</h2>
+    <ul class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      {categories.map((category) => (
+        <li><CategoryTile category={category} count={countByCategory.get(category.id) ?? 0} /></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mt-16" aria-labelledby="deals-heading">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow text-danger">Today only</p>
+        <h2 id="deals-heading" class="mt-1 text-heading-xl font-bold text-text">Deals of the day</h2>
+        <p class="mt-1 text-body-md text-muted">Selected styles at reduced prices while stock lasts.</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <Countdown label="Offer ends in" client:load />
+        <a href="/catalog" class="min-h-11 text-body-md font-semibold text-link hover:underline">All deals →</a>
+      </div>
+    </div>
+    <ul class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {deals.map((product) => <li><ProductCard product={product} /></li>)}
+    </ul>
+  </section>
+
+  <section class="mt-16" aria-labelledby="selections-heading">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Handpicked</p>
+        <h2 id="selections-heading" class="mt-1 text-heading-xl font-bold text-text">What shoppers love</h2>
+      </div>
+      <TabToggle tabs={tabs} client:load />
+    </div>
+    <div id="panel-bestsellers" data-tab-panel="bestsellers">
+      <ul class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {bestSellers.map((product) => <li><ProductCard product={product} /></li>)}
+      </ul>
+    </div>
+    <div id="panel-new" data-tab-panel="new" hidden>
+      <ul class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {newArrivals.map((product) => <li><ProductCard product={product} /></li>)}
+      </ul>
+    </div>
+    <div id="panel-rated" data-tab-panel="rated" hidden>
+      <ul class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {topRated.map((product) => <li><ProductCard product={product} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="mt-16" aria-labelledby="collections-heading">
+    <p class="eyebrow">Curated for you</p>
+    <h2 id="collections-heading" class="mt-1 text-heading-xl font-bold text-text">Collections</h2>
+    <ul class="mt-6 grid gap-5 md:grid-cols-3">
+      {collections.map((collection) => (
+        <li>
+          <a href={`/collections/${collection.slug}`} class="surface-card group block h-full overflow-hidden no-underline">
+            <img src={collection.image.src} alt={collection.image.alt} width="1600" height="500" loading="lazy" class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="p-5">
+              <p class="text-body-sm font-bold uppercase tracking-widest text-muted">{collection.kicker}</p>
+              <h3 class="mt-1 text-heading-lg font-bold text-text">{collection.name}</h3>
+              <p class="mt-2 text-body-md text-muted">{collection.description}</p>
+              <p class="mt-3 text-body-sm font-semibold text-success">{collection.offer}</p>
+              <p class="mt-4 text-body-md font-bold text-link">Shop collection →</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mt-16" aria-labelledby="reviews-heading">
+    <p class="eyebrow">From the crew</p>
+    <h2 id="reviews-heading" class="mt-1 text-heading-xl font-bold text-text">Shopper reviews</h2>
+    <ul class="mt-6 grid gap-5 md:grid-cols-3">
+      {testimonials.map((review) => (
+        <li class="surface-card p-5">
+          <p class="text-warning" aria-label="5 out of 5 stars">★★★★★</p>
+          <p class="mt-3 text-body-lg leading-relaxed text-text">“{review.quote}”</p>
+          <div class="mt-4 flex items-center gap-3">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-body-sm font-bold text-on-brand" aria-hidden="true">{review.initials}</span>
+            <div>
+              <p class="text-body-md font-semibold text-text">{review.name}</p>
+              <p class="text-body-sm text-muted">{review.role}</p>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mt-16" aria-labelledby="journal-heading">
+    <div class="flex items-baseline justify-between gap-4">
+      <div>
+        <p class="eyebrow">Field notes</p>
+        <h2 id="journal-heading" class="mt-1 text-heading-xl font-bold text-text">From the Journal</h2>
+      </div>
+      <a href="/journal" class="min-h-11 text-body-md font-semibold text-link hover:underline">Read all →</a>
+    </div>
+    <ul class="mt-6 grid gap-5 md:grid-cols-3">
+      {articles.slice(0, 3).map((article) => (
+        <li>
+          <a href={`/journal/${article.slug}`} class="surface-card group block h-full overflow-hidden no-underline">
+            <img src={article.cover} alt={article.coverAlt} width="1200" height="500" loading="lazy" class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="p-5">
+              <p class="text-body-sm font-bold uppercase tracking-widest text-muted">{article.category}</p>
+              <h3 class="mt-1 text-heading-md font-bold text-text">{article.title}</h3>
+              <p class="mt-2 text-body-sm text-muted">{formatArticleDate(article.publishedAt)} · {article.readingMinutes} min read</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="canvas-panel mt-16 flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+    <div>
+      <p class="eyebrow">Stay in the loop</p>
+      <h2 class="mt-2 text-2xl font-bold text-white sm:text-3xl">Get first access to every drop.</h2>
+      <p class="mt-2 max-w-xl text-body-md text-white/70">Join the list for new releases, restocks and member-only pricing.</p>
+    </div>
+    <Newsletter client:load />
+  </section>
+</BaseLayout>

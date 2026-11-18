@@ -1,0 +1,56 @@
+---
+import CartBadge from './islands/CartBadge';
+import ThemeToggle from './islands/ThemeToggle';
+import Logo from './Logo.astro';
+
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/catalog', label: 'Shop' },
+  { href: '/collections', label: 'Collections' },
+  { href: '/journal', label: 'Journal' },
+  { href: '/account', label: 'Account' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return path === '/';
+  return path.startsWith(href);
+}
+---
+
+<header class="sticky top-0 z-40">
+  <div class="bg-canvas px-4 py-1.5 text-center text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-accent-text/80">
+    Free shipping over $75 · New drops every Friday · Members get early access
+  </div>
+  <div class="glass border-b border-border">
+  <div class="page-container flex flex-wrap items-center gap-3 py-3">
+    <a href="/" class="no-underline">
+      <Logo />
+    </a>
+
+    <nav aria-label="Main navigation" class="order-3 w-full sm:order-none sm:ml-6 sm:w-auto">
+      <ul class="flex flex-wrap gap-1">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              class:list={[
+                'inline-flex min-h-11 items-center rounded-md px-3 text-body-md font-semibold no-underline transition-colors duration-quick',
+                isActive(link.href) ? 'bg-brand/10 text-brand' : 'text-muted hover:bg-surface-hover hover:text-text',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2">
+      <CartBadge client:visible />
+      <ThemeToggle client:visible />
+    </div>
+  </div>
+  </div>
+</header>

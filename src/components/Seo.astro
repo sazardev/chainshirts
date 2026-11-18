@@ -1,0 +1,32 @@
+---
+import { SITE_NAME, SITE_URL } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string | undefined;
+  image?: string | undefined;
+  type?: 'website' | 'article' | undefined;
+}
+
+const { title, description, path = '/', image, type = 'website' } = Astro.props;
+const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
+const canonical = new URL(path, SITE_URL).toString();
+const ogImage = new URL(image ?? '/og-image.png', SITE_URL).toString();
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0b0612" />
+<meta name="generator" content={Astro.generator} />
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content={type} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@chainshirts" />

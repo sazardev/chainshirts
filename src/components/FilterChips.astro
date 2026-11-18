@@ -1,0 +1,35 @@
+---
+import type { Category } from '../lib/domain/product';
+
+interface Props {
+  categories: Category[];
+  activeSlug?: string;
+}
+
+const { categories, activeSlug } = Astro.props;
+const chips = [
+  { name: 'All', slug: '' },
+  ...categories.map((category) => ({ name: category.name, slug: category.slug })),
+];
+---
+
+<nav aria-label="Filter by category" class="flex flex-wrap gap-2">
+  {chips.map((chip) => {
+    const active = chip.slug === (activeSlug ?? '');
+    const href = chip.slug === '' ? '/catalog' : `/categories/${chip.slug}`;
+    return (
+      <a
+        href={href}
+        aria-current={active ? 'page' : undefined}
+        class:list={[
+          'inline-flex min-h-11 items-center rounded-full border px-4 text-body-md font-semibold no-underline transition-colors duration-quick',
+          active
+            ? 'border-brand bg-brand text-on-brand'
+            : 'border-border bg-surface text-muted hover:bg-surface-hover hover:text-text',
+        ]}
+      >
+        {chip.name}
+      </a>
+    );
+  })}
+</nav>

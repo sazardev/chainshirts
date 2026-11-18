@@ -1,0 +1,92 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Comments from '../../components/islands/Comments';
+import LikeButton from '../../components/islands/LikeButton';
+import ProductPurchasePanel from '../../components/islands/ProductPurchasePanel';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { categoryLabel, getProducts } from '../../lib/catalog';
+import type { Product } from '../../lib/domain/product';
+import { discountPercent } from '../../lib/domain/product';
+import { productSchema } from '../../lib/seo';
+
+export const getStaticPaths = (async () => {
+  const products = await getProducts();
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const schema = { '@context': 'https://schema.org', '@graph': [productSchema(product)] };
+const discount = discountPercent(product);
+---
+
+<BaseLayout
+  title={product.name}
+  description={product.description}
+  path={`/products/${product.slug}`}
+  image={product.images[0]?.src}
+  schema={schema}
+>
+  <nav aria-label="Breadcrumb" class="text-body-sm text-muted">
+    <ol class="flex flex-wrap items-center gap-2">
+      <li><a href="/" class="text-link hover:underline">Home</a></li>
+      <li aria-hidden="true">/</li>
+      <li><a href="/catalog" class="text-link hover:underline">Catalog</a></li>
+      <li aria-hidden="true">/</li>
+      <li aria-current="page" class="font-semibold text-text">{product.name}</li>
+    </ol>
+  </nav>
+
+  <div class="mt-6 grid gap-8 lg:grid-cols-2">
+    <section aria-label="Product images" class="flex flex-col gap-4">
+      <div class="canvas-panel overflow-hidden">
+        <img
+          src={product.images[0]?.src ?? ''}
+          alt={product.images[0]?.alt ?? product.name}
+          width="800"
+          height="1000"
+          class="mx-auto aspect-4/5 w-full max-w-xl object-cover"
+        />
+      </div>
+      {product.images.length > 1 && (
+        <ul class="grid grid-cols-4 gap-3">
+          {product.images.slice(1).map((image) => (
+            <li>
+              <img src={image.src} alt={image.alt} width="1200" height="1500" loading="lazy" class="aspect-4/5 w-full rounded-md object-cover" />
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="eyebrow">{categoryLabel(product.category)}</p>
+        <p class="text-body-sm font-semibold uppercase tracking-wide text-muted">{product.brand}</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 text-body-md">
+        <span class="text-warning" aria-label={`Rated ${product.rating} out of 5`}>★★★★★</span>
+        <span class="font-semibold text-text">{product.rating.toFixed(1)}</span>
+        <span class="text-muted">{product.reviewCount} reviews</span>
+        {discount > 0 && <span class="rounded bg-danger px-2 py-0.5 text-body-sm font-bold text-on-brand">−{discount}%</span>}
+      </div>
+      <ProductPurchasePanel product={product} client:visible />
+      <div class="mt-2">
+        <LikeButton product={product} compact client:only="preact" />
+      </div>
+
+      <section aria-labelledby="details-heading" class="border-t border-border pt-6">
+        <h2 id="details-heading" class="text-heading-lg font-semibold text-text">Details</h2>
+        <p class="mt-2 max-w-prose text-body-lg leading-relaxed text-muted">{product.description}</p>
+      </section>
+    </div>
+  </div>
+
+  <Comments productId={product.id} client:load />
+</BaseLayout>

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["after 10pm and before 5am on monday"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchPackagePatterns": [
+        "astro",
+        "@astrojs/*",
+        "typescript",
+        "tailwindcss",
+        "@tailwindcss/*",
+        "vitest",
+        "@playwright/*",
+        "biome",
+        "@biomejs/*"
+      ],
+      "groupName": "framework and tooling"
+    }
+  ],
+  "prConcurrentLimit": 5
+}

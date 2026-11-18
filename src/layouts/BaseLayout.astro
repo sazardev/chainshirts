@@ -1,0 +1,49 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import ToastHost from '../components/islands/ToastHost';
+import JsonLd from '../components/JsonLd.astro';
+import Seo from '../components/Seo.astro';
+import { rootPrefix } from '../lib/paths';
+import '../styles/app.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string | undefined;
+  image?: string | undefined;
+  schema?: unknown;
+}
+
+const { title, description, path = Astro.url.pathname, image, schema } = Astro.props;
+const prefix = rootPrefix(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang="en" data-base-prefix={prefix}>
+  <head>
+    <meta charset="utf-8" />
+    <Seo title={title} description={description} path={path} image={image} />
+    {schema && <JsonLd data={schema} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      (function () {
+        var stored = null;
+        try { stored = window.localStorage.getItem('chainshirts.theme'); } catch (error) {}
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body class="min-h-dvh bg-bg text-text">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1" class="page-container py-8 sm:py-12">
+      <slot />
+    </main>
+    <Footer />
+    <ToastHost client:load />
+  </body>
+</html>

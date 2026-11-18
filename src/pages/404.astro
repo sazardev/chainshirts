@@ -1,0 +1,13 @@
+---
+import EmptyState from '../components/EmptyState.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="That ChainShirts page does not exist." path="/404">
+  <EmptyState
+    title="Page not found"
+    description="The link may be old, or the product may have left the catalog."
+    actionLabel="Back to the catalog"
+    actionHref="/catalog"
+  />
+</BaseLayout>

@@ -1,0 +1,57 @@
+---
+import type { GetStaticPaths } from 'astro';
+import FilterChips from '../../components/FilterChips.astro';
+import CatalogFilters from '../../components/islands/CatalogFilters';
+import CatalogSearch from '../../components/islands/CatalogSearch';
+import ProductCard from '../../components/ProductCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategories, getProducts } from '../../lib/catalog';
+import type { Category, Product } from '../../lib/domain/product';
+import { itemListSchema } from '../../lib/seo';
+
+export const getStaticPaths = (async () => {
+  const [categories, products] = await Promise.all([getCategories(), getProducts()]);
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: {
+      category,
+      categories,
+      products: products.filter((product) => product.category === category.id),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+  categories: Category[];
+  products: Product[];
+}
+
+const { category, categories, products } = Astro.props;
+const schema = { '@context': 'https://schema.org', '@graph': [itemListSchema(products)] };
+---
+
+<BaseLayout
+  title={category.name}
+  description={category.description}
+  path={`/categories/${category.slug}`}
+  schema={schema}
+>
+  <header class="flex flex-col gap-4">
+    <div>
+      <p class="eyebrow">Category</p>
+      <h1 class="mt-2 text-display font-bold text-text">{category.name}</h1>
+      <p class="mt-2 max-w-2xl text-body-lg text-muted">{category.description}</p>
+      <p class="mt-1 text-body-sm text-muted" aria-live="polite">{products.length} products in this category</p>
+    </div>
+    <CatalogSearch client:visible />
+    <FilterChips categories={categories} activeSlug={category.slug} />
+    <CatalogFilters client:load />
+  </header>
+
+  <ul class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    {products.map((product) => (
+      <li><ProductCard product={product} /></li>
+    ))}
+  </ul>
+</BaseLayout>

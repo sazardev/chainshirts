@@ -1,0 +1,26 @@
+---
+import Banner from '../components/Banner.astro';
+import CheckoutForm from '../components/islands/CheckoutForm';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Checkout"
+  description="Complete your ChainShirts order securely."
+  path="/checkout"
+>
+  <header>
+    <p class="eyebrow">Secure checkout</p>
+    <h1 class="mt-2 text-display font-bold text-text">Checkout</h1>
+  </header>
+
+  <div class="mt-6">
+    <Banner tone="info" title="No real checkout">
+      Complete your delivery details to place your order.
+    </Banner>
+  </div>
+
+  <div class="mt-8">
+    <CheckoutForm client:load />
+  </div>
+</BaseLayout>

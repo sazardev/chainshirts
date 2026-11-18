@@ -1,0 +1,31 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-2.5">
+  <svg
+    width="38"
+    height="38"
+    viewBox="0 0 48 48"
+    fill="none"
+    role="img"
+    aria-label="ChainShirts logo"
+    class="shrink-0"
+  >
+    <rect width="48" height="48" rx="12" fill="var(--color-brand)" />
+    <g transform="rotate(-38 24 24)" stroke="var(--color-on-brand)" stroke-width="3.2" fill="none">
+      <rect x="8" y="15" width="20" height="13" rx="6.5" />
+      <rect x="20" y="20" width="20" height="13" rx="6.5" />
+    </g>
+    <path d="M24 31 L29 41 L24 38 L19 41 Z" fill="var(--color-on-brand)" />
+    <circle cx="36.5" cy="11.5" r="2.5" fill="var(--color-cyan)" />
+  </svg>
+  <span class="flex flex-col leading-none">
+    <span class="text-[0.9375rem] font-extrabold tracking-[0.12em] text-text">CHAINSHIRTS</span>
+    {!compact && <span class="mt-1 text-[0.5625rem] font-bold uppercase tracking-[0.22em] text-muted">Public Safety Division</span>}
+  </span>
+</span>

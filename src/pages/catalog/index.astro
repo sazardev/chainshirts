@@ -1,0 +1,53 @@
+---
+import EmptyState from '../../components/EmptyState.astro';
+import FilterChips from '../../components/FilterChips.astro';
+import CatalogFilters from '../../components/islands/CatalogFilters';
+import CatalogSearch from '../../components/islands/CatalogSearch';
+import ProductCard from '../../components/ProductCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategories, getProducts } from '../../lib/catalog';
+import { itemListSchema, websiteSchema } from '../../lib/seo';
+
+const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [websiteSchema(), itemListSchema(products)],
+};
+---
+
+<BaseLayout
+  title="Catalog"
+  description="Browse every ChainShirts product across clothing and anime merchandise."
+  path="/catalog"
+  schema={schema}
+>
+  <header class="flex flex-col gap-4">
+    <div>
+      <p class="eyebrow">The full drop</p>
+      <h1 class="mt-2 text-display font-bold text-text">Catalog</h1>
+      <p class="mt-2 max-w-2xl text-body-lg text-muted">
+        {products.length} products across {categories.length} categories. Filter, search, like and add to cart.
+      </p>
+    </div>
+    <CatalogSearch client:visible />
+    <FilterChips categories={categories} />
+    <CatalogFilters client:load />
+  </header>
+
+  <ul class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    {products.map((product) => (
+      <li><ProductCard product={product} /></li>
+    ))}
+  </ul>
+
+  {products.length === 0 && (
+    <div class="mt-8">
+      <EmptyState
+        title="No products yet"
+        description="No products match your filters. Try another category."
+        actionLabel="Go home"
+        actionHref="/"
+      />
+    </div>
+  )}
+</BaseLayout>

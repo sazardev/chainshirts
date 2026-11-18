@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ChainShirts">
+  <rect width="64" height="64" rx="14" fill="#0b0612"/>
+  <path d="M18 16h28l-4 14H14z" fill="none" stroke="#ff2bd6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M22 30v18h20V30" fill="none" stroke="#00f0ff" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M28 36h8M28 42h8" stroke="#ff2bd6" stroke-width="3" stroke-linecap="round"/>
+</svg>

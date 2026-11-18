@@ -1,0 +1,67 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatArticleDate, getArticles } from '../../lib/journal';
+import { SITE_URL } from '../../lib/site';
+
+export const getStaticPaths = (async () => {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.slug }, props: { article } }));
+}) satisfies GetStaticPaths;
+
+const { article } = Astro.props;
+const { Content } = await render(article.entry);
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BlogPosting',
+      headline: article.title,
+      description: article.description,
+      image: new URL(article.cover, SITE_URL).toString(),
+      datePublished: article.publishedAt,
+      author: { '@type': 'Person', name: article.author },
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={article.title}
+  description={article.description}
+  path={`/journal/${article.slug}`}
+  image={article.cover}
+  schema={schema}
+>
+  <article class="mx-auto max-w-3xl">
+    <nav aria-label="Breadcrumb" class="text-body-sm text-muted">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="/" class="text-link hover:underline">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="/journal" class="text-link hover:underline">Journal</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="font-semibold text-text">{article.category}</li>
+      </ol>
+    </nav>
+
+    <header class="mt-8">
+      <p class="eyebrow">{article.category}</p>
+      <h1 class="mt-2 text-display font-extrabold leading-tight text-text sm:text-5xl">{article.title}</h1>
+      <p class="mt-4 text-body-lg text-muted">{article.description}</p>
+      <p class="mt-4 text-body-sm text-muted">
+        By {article.author} · {formatArticleDate(article.publishedAt)} · {article.readingMinutes} min read
+      </p>
+    </header>
+
+    <img src={article.cover} alt={article.coverAlt} width="1200" height="500" class="mt-8 aspect-[12/5] w-full rounded-xl object-cover" />
+
+    <div class="prose mt-10 max-w-none text-body-lg leading-relaxed text-text [&_h1]:text-heading-xl [&_h1]:font-bold [&_p]:mt-4 [&_p]:text-muted [&_ul]:mt-4 [&_li]:mt-2 [&_li]:list-disc [&_li]:pl-5">
+      <Content />
+    </div>
+
+    <p class="mt-10 border-t border-border pt-6">
+      <a href="/journal" class="min-h-11 text-body-md font-semibold text-link hover:underline">← Back to the Journal</a>
+    </p>
+  </article>
+</BaseLayout>

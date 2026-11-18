@@ -1,0 +1,19 @@
+---
+import CartPage from '../components/islands/CartPage';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Cart"
+  description="Review your bag and complete your ChainShirts order."
+  path="/cart"
+>
+  <header>
+    <p class="eyebrow">Your basket</p>
+    <h1 class="mt-2 text-display font-bold text-text">Cart</h1>
+    <p class="mt-2 text-body-lg text-muted">Quantities, totals and line items update instantly.</p>
+  </header>
+  <div class="mt-8">
+    <CartPage client:load />
+  </div>
+</BaseLayout>
