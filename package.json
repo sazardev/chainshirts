@@ -20,7 +20,7 @@
     "test:e2e": "playwright test",
     "hooks": "lefthook install",
     "art": "python3 scripts/fetch-stock.py && python3 scripts/fetch-more.py && python3 scripts/fetch-galleries.py",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler pages deploy dist --project-name chainshirts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.14",
